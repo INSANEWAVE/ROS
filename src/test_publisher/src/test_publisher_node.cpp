@@ -1,7 +1,8 @@
-#include <rclcpp/rclcpp.hpp>
-#include <std_msgs/msg/string.hpp>// подключаем заголовочный файл для ROS2 на C++ юзаем по умолчанию
+#include <rclcpp/rclcpp.hpp>// подключаем заголовочный файл для ROS2 на C++ юзаем по умолчанию
+#include <std_msgs/msg/string.hpp>//Подключаем строковые типы сообщений
+#include <std_msgs/msg/int32.hpp>//Подключаем целочисленные цифровые сообщения
 
-using namespace std::chrono_literals; // Используем пространство имен литералов для удобных нам инетрвалов времени
+using namespace std::chrono_literals; // Используем пространство имен литералов для удобных нам итервалов времени
 class TestPublisher : public rclcpp::Node //Класс узла, всегда для ноды является производной класса (наследником) класса rclcpp::Node со своим функционалом
 {
 public: // ОткрытаЯ часть класса, тут есть конструктор
@@ -9,9 +10,11 @@ public: // ОткрытаЯ часть класса, тут есть конст�
       Node("test_publisher"),
         counter(0)
     {
-        publisher  = this->create_publisher<std_msgs::msg::String>("/test_topic", 10); // Вот это пу,ликатор в топик
-        timer = this->create_wall_timer(500ms, std::bind(&TestPublisher::timer_callback, this));
-        // тут мы впихнули таймер и тут же его конфигурируем
+    publisher1  = this->create_publisher<std_msgs::msg::String>("/test_topic", 10); // Вот это пу,ликатор в топик
+    publisher2  = this->create_publisher<std_msgs::msg::Int32>("/msg_tr", 10); //публикатор по заданию
+
+    timer = this->create_wall_timer(500ms, std::bind(&TestPublisher::timer_callback, this));// тут мы впихнули таймер и тут же его конфигурируем
+
     }
 private:
     rclcpp::TimerBase::SharedPtr timer; // Указываем на объект таймера TimerBase
