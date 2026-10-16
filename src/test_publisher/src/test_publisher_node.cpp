@@ -11,20 +11,30 @@ public: // ОткрытаЯ часть класса, тут есть конст�
         counter(0)
     {
     publisher1  = this->create_publisher<std_msgs::msg::String>("/test_topic", 10); // Вот это пу,ликатор в топик
-    publisher2  = this->create_publisher<std_msgs::msg::Int32>("/msg_tr", 10); //публикатор по заданию
+    publisher2  = this->create_publisher<std_msgs::msg::Int32>("/msg_tr", 10); //публикатор по заданиюВ
 
     timer = this->create_wall_timer(500ms, std::bind(&TestPublisher::timer_callback, this));// тут мы впихнули таймер и тут же его конфигурируем
 
     }
 private:
     rclcpp::TimerBase::SharedPtr timer; // Указываем на объект таймера TimerBase
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher;
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher1;
+    rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher2;
     unsigned int counter; // Переменная счётчика
     void timer_callback(){ // Функция таймера
-      std_msgs::msg::String message;
-      message.data = "Counter " + std::to_string(counter);
-      publisher->publish(message);
-      RCLCPP_INFO_STREAM(this->get_logger(),"Published: "<<message.data);
+
+      std_msgs::msg::String msg1;
+      std_msgs::msg::Int32 msg2;
+
+      msg1.data = "Counter " + std::to_string(counter);
+      msg2.data = counter;
+
+      publisher1->publish(msg1);
+      publisher2->publish(msg2);
+
+
+      RCLCPP_INFO_STREAM(this->get_logger(),
+                         "Published: "<<msg1.data<< " | "<<msg2.data);
       counter++;
     }
 };
