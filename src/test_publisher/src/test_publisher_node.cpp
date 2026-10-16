@@ -27,7 +27,6 @@ private:
 
       std_msgs::msg::String msg1;
       std_msgs::msg::Int32 msg2;// !!ФАН ФАКТ это сообщение вызовет переполнение при работе публикатора более 11 дней подряд. :)Ы
- C
       msg1.data = "Counter " + std::to_string(counter);
       msg2.data = static_cast<int32_t>(counter);// Вот тут мы воткнём статик кастер потому что нам следует ЯВНО указать преобразование, типа правила этикета.
 
