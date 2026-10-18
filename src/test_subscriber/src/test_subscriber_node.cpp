@@ -16,17 +16,22 @@ public: // ОткрытаЯ часть класса, тут есть конст�
         subscription2 = this->create_subscription<std_msgs::msg::Int32>("/msg_tr", 10, std::bind(&TestSubscriber::counter,
                                                                                                      this,
                                                                                                      std::placeholders::_1)); // При вызове функции
+         publisher_recieved  = this->create_publisher<std_msgs::msg::Int32>("/msg_rcv", 10); //публикатор счётчика принятого
     }
 private:
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription1;
     rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr subscription2;
+    rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher_recieved;
 unsigned int RECIEVED = 0;
-    void topic_callback(const std_msgs::msg::String &msg){ // Функция топика - отзывается
+    void topic_callback(const std_msgs::msg::String &msg){ // Функция топика - отзывается и отсылает принятое сообщение
       RCLCPP_INFO_STREAM(this->get_logger(),"Received: "<<msg.data);
     }
-    void counter(const std_msgs::msg::Int32){ // Функция топика - отзывается
+    void counter(const std_msgs::msg::Int32){ // Функция счётчика - отзывается и инкрементирует счётчик + отсылает его
+        std_msgs::msg::Int32 msg_rcv;
         RECIEVED++;
+        msg_rcv.data = RECIEVED;
         RCLCPP_INFO_STREAM(this->get_logger(),"Counted: "<<RECIEVED);
+        publisher_recieved->publish(msg_rcv);
     }
 };
 
