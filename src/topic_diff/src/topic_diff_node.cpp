@@ -10,28 +10,30 @@ public: // ОткрытаЯ часть класса, тут есть конст�
     TestSubscriber(): //  Конструктор класса, функция вызывающаяся при создании объекта класса
       Node("test_subscriber")
     {
-        subscription1 = this->create_subscription<std_msgs::msg::String>("/test_topic", 10, std::bind(&TestSubscriber::topic_callback,
+        subscription_trm = this->create_subscription<std_msgs::msg::Int32>("/msg_tr", 10, std::bind(&TestSubscriber::topic_callback,
                                                                                                      this,
                                                                                                      std::placeholders::_1)); // При вызове функции
-        subscription2 = this->create_subscription<std_msgs::msg::Int32>("/msg_tr", 10, std::bind(&TestSubscriber::counter,
+        subscription_rcv = this->create_subscription<std_msgs::msg::Int32>("/msg_rcv", 10, std::bind(&TestSubscriber::counter,
                                                                                                      this,
                                                                                                      std::placeholders::_1)); // При вызове функции
-         publisher_recieved = this->create_publisher<std_msgs::msg::Int32>("/msg_rcv", 10); //публикатор счётчика принятого
+         publisher_diff = this->create_publisher<std_msgs::msg::Int32>("/msg_diff", 10); //публикатор счётчика разницы
     }
 private:
-    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription1;
-    rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr subscription2;
-    rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher_recieved;
+    rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr subscription_trm;
+    rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr subscription_rcv;
+    rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher_diff;
 unsigned int RECIEVED = 0;
-    void topic_callback(const std_msgs::msg::String &msg){ // Функция топика - отзывается и отсылает принятое сообщение
-      RCLCPP_INFO_STREAM(this->get_logger(),"Received: "<<msg.data);
-    }
+int difference;
+int tr;
+int rcv;
     void counter(const std_msgs::msg::Int32){ // Функция счётчика - отзывается и инкрементирует счётчик + отсылает его
-        std_msgs::msg::Int32 msg_rcv;
-        RECIEVED++;
-        msg_rcv.data = RECIEVED;
-        RCLCPP_INFO_STREAM(this->get_logger(),"Counted: "<<RECIEVED);
-        publisher_recieved->publish(msg_rcv);
+        std_msgs::msg::Int32 msg_diff;
+        int tr = 0;
+        int rcv = 0;
+        difference = (tr - rcv);// Вот тут бы модуль
+        msg_diff.data = std::abc(difference);// Ну тут можно модуль вот
+        RCLCPP_INFO_STREAM(this->get_logger(),"Counted: "<<msg_diff;
+        publisher_diff->publish(msg_diff);
     }
 };
 
