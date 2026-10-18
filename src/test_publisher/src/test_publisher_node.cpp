@@ -10,8 +10,8 @@ public: // ОткрытаЯ часть класса, тут есть конст�
       Node("test_publisher"),
         counter(0)
     {
-    publisher1  = this->create_publisher<std_msgs::msg::String>("/test_topic", 10); // Вот тут мы говорим чё объявленный публикатор делает
-    publisher2  = this->create_publisher<std_msgs::msg::Int32>("/msg_tr", 10); //публикатор по заданиюВ
+    publisher1  = this->create_publisher<std_msgs::msg::String>("/test_topic", 10); // Вот тут мы говорим что объявленный публикатор делает
+    publisher2  = this->create_publisher<std_msgs::msg::Int32>("/msg_tr", 10); //публикатор по заданию - будет отправлять данные счётчика
 
     timer = this->create_wall_timer(500ms, std::bind(&TestPublisher::timer_callback, this));// тут мы впихнули таймер и тут же его конфигурируем
 
@@ -24,7 +24,7 @@ private:
 
 
     void timer_callback(){ // Функция таймера
-
+      counter++;
       std_msgs::msg::String msg1;
       std_msgs::msg::Int32 msg2;// !!ФАН ФАКТ это сообщение вызовет переполнение при работе публикатора более 11 дней подряд. :)Ы
       msg1.data = "Counter " + std::to_string(counter);
@@ -37,7 +37,6 @@ private:
 
       RCLCPP_INFO_STREAM(this->get_logger(),
                          "Published: "<<msg1.data<< " | "<<msg2.data);
-      counter++;
     }
 };
 
