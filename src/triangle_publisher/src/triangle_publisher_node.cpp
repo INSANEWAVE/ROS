@@ -1,5 +1,6 @@
 #include <rclcpp/rclcpp.hpp>// подключаем заголовочный файл для ROS2 на C++ юзаем по умолчанию
 #include <geometry_msgs/msg/point.hpp>// Для кастомного типа сообщений
+#include <triangle_message/msg/triangle.hpp> // наше кастомное сообщение
 #include <random> //Библиотека генерации рандомных чисел
 
 using namespace std::chrono_literals; // Используем пространство имен чтобы вместо std кракозябры прописывать обычные секунды, милисекунды и тд
@@ -13,7 +14,7 @@ public: // ОткрытаЯ часть класса, тут есть конст�
     publisher_triangle_random  = this->create_publisher<std_msgs::msg::String>("/test_topic", 10); // Вот тут мы говорим чё объявленный публикатор делает
 
 
-    timer = this->create_wall_timer(500ms, std::bind(&TrianglePublisher::timer_callback, this));// тут мы впихнули таймер и тут же его конфигурируем
+    timer = this->create_wall_timer(1000ms, std::bind(&TrianglePublisher::timer_callback, this));// тут мы впихнули таймер и тут же его конфигурируем
 
     }
 private:
@@ -32,9 +33,7 @@ private:
 
 
 
-      RCLCPP_INFO_STREAM(this->get_logger(),
-                         "Published: "<<msg1.data<< " | "<<msg2.data);
-      counter++;
+      RCLCPP_INFO_STREAM(this->get_logger(),"Сгенерировали треугольник: "<<msg1.data<< " | "<<msg2.data);
     }
 };
 
