@@ -16,7 +16,7 @@ public: // ОткрытаЯ часть класса, тут есть конст�
         subscription2 = this->create_subscription<std_msgs::msg::Int32>("/msg_tr", 10, std::bind(&TestSubscriber::counter,
                                                                                                      this,
                                                                                                      std::placeholders::_1)); // При вызове функции
-         publisher_recieved = this->create_publisher<std_msgs::msg::Int32>("/msg_rcv", 10); //публикатор счётчика принятого
+         publisher_recieved = this->create_publisher<std_msgs::msg::Int32>("/msg_rcv", 10); //публикатор счётчика принятого-
     }
 private:
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription1;
