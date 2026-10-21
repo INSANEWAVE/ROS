@@ -1,45 +1,51 @@
-#include <rclcpp/rclcpp.hpp>// подключаем заголовочный файл для ROS2 на C++ юзаем по умолчанию
+#include <rclcpp/rclcpp.hpp> // подключаем заголовочный файл для ROS2 на C++ юзаем по умолчанию
 #include <std_srvs/srv/set_bool.hpp>
+#include <string>
 
+using namespace std::chrono_literals; // Используем пространство имен литералов для удобных нам интервалов времени
 
-
-using namespace std::chrono_literals; // Используем пространство имен литералов для удобных нам инетрвалов времени
-class TestService : public rclcpp::Node //Класс узла, всегда для ноды является производной класса (наследником) класса rclcpp::Node со своим функционалом
+class TestBasicService : public rclcpp::Node // Класс узла, всегда для ноды является производной класса (наследником) класса rclcpp::Node со своим функционалом
 {
-public: // ОткрытаЯ часть класса, тут есть конструктор
-    TestService(): //  Конструктор класса, функция вызывающаяся при создании объекта класса
+public: // Открытая часть класса, тут есть конструктор
+    TestBasicService(): // Конструктор класса, функция вызывающаяся при создании объекта класса
       Node("test_basic_service_node"),
-      flag(falce)
+      flag(false)
     {
-        service = this->create_service<std_msgs::msg::String>("/test_topic", 10, std::bind(&TestService::topic_callback,
-                                                                                                     this,
-                                                                                                     std::placeholders::_1)); // При вызове функции
-        subscription2 = this->create_subscription<std_msgs::msg::Int32>("/msg_tr", 10, std::bind(&TestService::counter,
-                                                                                                     this,
-                                                                                                     std::placeholders::_1)); // При вызове функции
-         publisher_recieved = this->create_publisher<std_msgs::msg::Int32>("/msg_rcv", 10); //публикатор счётчика принятого-
+        // Исправлено форматирование для читаемости
+        service = this->create_service<std_srvs::srv::SetBool>(
+            "bool_service",
+            std::bind(&TestBasicService::setFlag, this, std::placeholders::_1, std::placeholders::_2)
+        );
     }
+
 private:
     bool flag;
-    rclcpp::Service<std_srvs/srv/SetBool>::SharedPtr service;
-    // rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr subscription2;
-    // rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr publisher_recieved;
-unsigned int RECIEVED = 0;
-    void topic_callback(const std_msgs::msg::String &msg){ // Функция топика - отзывается и отсылает принятое сообщение
-      RCLCPP_INFO_STREAM(this->get_logger(),"Received: "<<msg.data);
-    }
-    void counter(const std_msgs::msg::Int32){ // Функция счётчика - отзывается и инкрементирует счётчик + отсылает его
-        std_msgs::msg::Int32 msg_rcv;
-        RECIEVED++;
-        msg_rcv.data = RECIEVED;
-        RCLCPP_INFO_STREAM(this->get_logger(),"Counted: "<<RECIEVED);
-        publisher_recieved->publish(msg_rcv);
+    // ИСПРАВЛЕНО: было std_srvs/srv/SetBool (со слэшами), стало std_srvs::srv::SetBool
+    rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr service;
+
+    // ИСПРАВЛЕНО: было std::shared_prt, стало std::shared_ptr
+    void setFlag(const std::shared_ptr<std_srvs::srv::SetBool::Request> request, std::shared_ptr<std_srvs::srv::SetBool::Response> response)
+    {
+        flag = request->data;
+
+        // ИСПРАВЛЕНО: success - это тип bool, туда нельзя записать строку
+        response->success = true;
+
+        // ИСПРАВЛЕНО: строка должна записываться в поле message, а не success
+        response->message = "Флаг изменился на " + std::string(flag ? "1" : "0");
+
+        // ИСПРАВЛЕНО: опечатка responce -> response
+        RCLCPP_INFO_STREAM(this->get_logger(), response->message);
     }
 };
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
     rclcpp::init(argc, argv); // подключаемся к системе с передачей параметров cmd
-    rclcpp::spin(std::make_shared<TestService>()); // Функция спин - цикл с указателем на наш узел
+
+    // ИСПРАВЛЕНО: было TestService, а класс называется TestBasicService
+    rclcpp::spin(std::make_shared<TestBasicService>()); // Функция спин - цикл с указателем на наш узел
+
     rclcpp::shutdown(); // Как только узел заканчивает работу (сам или после команды или сбой) система выполняет шатдаун
-  return 0;
+    return 0;
 }
