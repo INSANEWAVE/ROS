@@ -4,38 +4,37 @@
 
 using namespace std::chrono_literals; // Используем пространство имен литералов для удобных нам интервалов времени
 
-class TestBasicService : public rclcpp::Node // Класс узла, всегда для ноды является производной класса (наследником) класса rclcpp::Node со своим функционалом
+class TestBasicService : public rclcpp::Node
 {
 public: // Открытая часть класса, тут есть конструктор
-    TestBasicService(): // Конструктор класса, функция вызывающаяся при создании объекта класса
+    TestBasicService(): // Конструктор класса
       Node("test_basic_service_node"),
-      flag(false)
+      flag(false) // Флаг для проверки раьоты сервиса, начальное значение в скобках - false
     {
-        // Исправлено форматирование для читаемости
-        service = this->create_service<std_srvs::srv::SetBool>(
-            "bool_service",
-            std::bind(&TestBasicService::setFlag, this, std::placeholders::_1, std::placeholders::_2)
+
+        service = this->create_service<std_srvs::srv::SetBool>("bool_service",
+                                                                        std::bind(&TestBasicService::setFlag,                                                                                   this,
+                                                                                  std::placeholders::_1, // Поле запроса
+                                                                                  std::placeholders::_2) // Поле ответа
         );
     }
-
 private:
     bool flag;
-    // ИСПРАВЛЕНО: было std_srvs/srv/SetBool (со слэшами), стало std_srvs::srv::SetBool
-    rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr service;
 
-    // ИСПРАВЛЕНО: было std::shared_prt, стало std::shared_ptr
+    rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr service;// Указатель на сервис
+
     void setFlag(const std::shared_ptr<std_srvs::srv::SetBool::Request> request, std::shared_ptr<std_srvs::srv::SetBool::Response> response)
     {
         flag = request->data;
 
-        // ИСПРАВЛЕНО: success - это тип bool, туда нельзя записать строку
+
         response->success = true;
 
-        // ИСПРАВЛЕНО: строка должна записываться в поле message, а не success
-        response->message = "Флаг изменился на " + std::string(flag ? "1" : "0");
 
-        // ИСПРАВЛЕНО: опечатка responce -> response
-        RCLCPP_INFO_STREAM(this->get_logger(), response->message);
+        response->message = "Флаг изменился на " + std::string(flag ? "true" : "false");
+
+
+        RCLCPP_INFO_STREAM(this->get_logger(),response->message);
     }
 };
 
