@@ -10,8 +10,7 @@ public: // Открытая часть класса, тут есть конст�
     TestCustomService(): // Конструктор класса
       Node("test_custom_service_node")
     {
-        // ИСПРАВЛЕНО: test_custom_srv -> trajectory_counter_srv
-        // ИСПРАВЛЕНО: calculateSquare -> calculateTrajectoryLength
+
         service = this->create_service<trajectory_counter_srv::srv::TrajectoryCounter>("trajectory_counter",
                                                                         std::bind(&TestCustomService::calculateTrajectoryLength, this,
                                                                                   std::placeholders::_1, // Поле запроса
@@ -19,10 +18,10 @@ public: // Открытая часть класса, тут есть конст�
         );
     }
 private:
-    // ИСПРАВЛЕНО: test_custom_srv -> trajectory_counter_srv
+
     rclcpp::Service<trajectory_counter_srv::srv::TrajectoryCounter>::SharedPtr service;// Указатель на сервис
 
-    // ИСПРАВЛЕНО: test_custom_srv -> trajectory_counter_srv
+
     void calculateTrajectoryLength(const std::shared_ptr<trajectory_counter_srv::srv::TrajectoryCounter::Request> request,
                                        std::shared_ptr<trajectory_counter_srv::srv::TrajectoryCounter::Response> response)
         {
@@ -38,10 +37,10 @@ private:
                              pow(request->pt4.y - request->pt3.y, 2) +
                              pow(request->pt4.z - request->pt3.z, 2));
 
-            response->lenght = l1 + l2 + l3;
+            response->length = l1 + l2 + l3;
 
             // Выводим результат в терминал
-            RCLCPP_INFO_STREAM(this->get_logger(), "Trajectory Length: " << response->lenght);
+            RCLCPP_INFO_STREAM(this->get_logger(), "кратчайшая длина траектории: " << response->length);
         }
 }; // <--- ИСПРАВЛЕНО: Добавлена закрывающая скобка для класса
 
