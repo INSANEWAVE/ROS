@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(trajectoryCounter_srv)
+project(trajectory_counter_srv)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -25,6 +25,6 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 rosidl_generate_interfaces(${PROJECT_NAME}
-    "srv/trajectoryCounter.srv"
+    "srv/TrajectoryCounter.srv"
     DEPENDENCIES geometry_msgs)
 ament_package()
