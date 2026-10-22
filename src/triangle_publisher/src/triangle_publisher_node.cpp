@@ -21,7 +21,7 @@ private:
     rclcpp::Publisher<triangle_message::msg::Triangle>::SharedPtr publisher_triangle_random; // Вот тут объявляются публикаторы тут же добавляются новые
 
 
-    // Инструменты для рандома (инициализируем правильно):
+    // Инструменты для рандома
     std::random_device rd;
     std::mt19937 gen{rd()};
     std::uniform_int_distribution<int> dis{1, 100}; // От 1 до 100

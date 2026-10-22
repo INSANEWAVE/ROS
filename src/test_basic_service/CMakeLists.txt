@@ -29,7 +29,7 @@ add_executable(${PROJECT_NAME}_node src/${PROJECT_NAME}_node.cpp)
 target_link_libraries(${PROJECT_NAME}_node
   PRIVATE
     rclcpp::rclcpp
-    std_msgs::std_srvs
+    std_srvs::std_srvs
     ${test_custom_message_TARGETS}
 )
 install(TARGETS

@@ -2,6 +2,7 @@
 #include <std_srvs/srv/set_bool.hpp>
 #include <string>
 
+
 using namespace std::chrono_literals; // Используем пространство имен литералов для удобных нам интервалов времени
 
 class TestBasicService : public rclcpp::Node
@@ -9,7 +10,7 @@ class TestBasicService : public rclcpp::Node
 public: // Открытая часть класса, тут есть конструктор
     TestBasicService(): // Конструктор класса
       Node("test_basic_service_node"),
-      flag(false) // Флаг для проверки раьоты сервиса, начальное значение в скобках - false
+      flag(false) // Флаг для проверки работы сервиса, начальное значение в скобках - false
     {
 
         service = this->create_service<std_srvs::srv::SetBool>("bool_service",
