@@ -13,7 +13,7 @@ public:
     {
         client =
             this->create_client<std_srvs::srv::SetBool>("bool_service");
-        timer = this->create_wall_timer(500ms,
+        timer = this->create_wall_timer(2000ms,
                     std::bind(&TestBasicClient::timer_callback,
                               this));// Таймер и вызов в периоде по таймеру вообще необязателен, идея тут - единичный или НЕ постоянный с
     }
