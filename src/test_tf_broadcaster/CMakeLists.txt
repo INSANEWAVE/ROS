@@ -13,23 +13,16 @@ find_package(std_msgs REQUIRED)
 find_package(test_custom_message REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(geometry_msgs REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
   set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+
 add_executable(${PROJECT_NAME}_node src/${PROJECT_NAME}_node.cpp)
-#ament_target_dependencies(${PROJECT_NAME}_node rclcpp std_msgs)
 target_link_libraries(${PROJECT_NAME}_node
   PRIVATE
     rclcpp::rclcpp
@@ -39,7 +32,32 @@ target_link_libraries(${PROJECT_NAME}_node
     geometry_msgs::geometry_msgs
     ${test_custom_message_TARGETS}
 )
-install(TARGETS
+install(
+    TARGETS
         ${PROJECT_NAME}_node
-        DESTINATION lib/${PROJECT_NAME})
+        DESTINATION lib/${PROJECT_NAME}
+)
+
+add_executable(test_tf_listener_node src/test_tf_listener_node.cpp)
+
+
+target_link_libraries(test_tf_listener_node
+  PRIVATE
+    rclcpp::rclcpp
+    tf2::tf2
+    tf2_ros::tf2_ros
+    geometry_msgs::geometry_msgs
+)
+
+install(TARGETS
+    test_tf_listener_node
+    DESTINATION lib/${PROJECT_NAME}
+)
+
+
+install(
+    DIRECTORY launch
+    DESTINATION share/${PROJECT_NAME}
+)
+
 ament_package()
