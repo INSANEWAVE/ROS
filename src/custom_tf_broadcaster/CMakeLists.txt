@@ -13,6 +13,9 @@ find_package(std_msgs REQUIRED)
 find_package(test_custom_message REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -29,6 +32,7 @@ target_link_libraries(${PROJECT_NAME}_node
     tf2::tf2
     std_msgs::std_msgs
     tf2_ros::tf2_ros
+    nav_msgs::nav_msgs
     geometry_msgs::geometry_msgs
     ${test_custom_message_TARGETS}
 )
