@@ -29,3 +29,14 @@ ros2 param load /test_parameters_node test_dump.yaml
 Набор 1: Стороны 3.0, 4.0, 5.0. Площадь: 6.00
 Набор 2: Стороны 5.0, 5.0, 5.0. Площадь: 10.83
 Набор 3: Стороны 7.5, 8.2, 10.1. Площадь: 30.28
+
+source install/setup.bash
+ros2 topic echo /tf 
+
+Это для проверки работы трансформаций
+
+
+И это тоже но через слушалку
+ros2 run tf2_tools view_frames
+
+rviz2
