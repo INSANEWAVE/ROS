@@ -18,3 +18,9 @@ ros2 param list (get)
 ros2 param dump /test_parameters_node > test_dump.yaml
 
 ros2 param load /test_parameters_node test_dump.yaml
+
+ ros2 launch test_launch test_param_launch.py 
+
+
+
+

@@ -51,5 +51,5 @@ int main(int argc, char *argv[]) {
     rclcpp::init(argc, argv); // Инициализация ROS 2
     rclcpp::spin(std::make_shared<TestDynamicParameters>()); // Запуск цикла обработки событий узла
     rclcpp::shutdown(); // Завершение работы ROS 2
-    return 0; // Код возврата (на фото обрезан, но обязателен)
+    return 0; // Код возврата
 }
