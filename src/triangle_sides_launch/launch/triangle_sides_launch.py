@@ -6,7 +6,7 @@ def generate_launch_description():
         Node(
             package="triangle_sides_parameters",
             executable="triangle_sides_parameters_node",
-            name="test_param_node1",
+            name="test_param_model",
             output="screen",
             parameters=[
                 {
